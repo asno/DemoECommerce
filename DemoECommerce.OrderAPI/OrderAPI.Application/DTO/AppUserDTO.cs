@@ -2,7 +2,7 @@
 
 namespace OrderAPI.Application.DTO
 {
-    public record AppUser
+    public record AppUserDTO
     (
         int Id,
         [Required] string Name,

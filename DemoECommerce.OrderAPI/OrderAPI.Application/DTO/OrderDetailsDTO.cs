@@ -8,6 +8,7 @@ namespace OrderAPI.Application.DTO
         [Required] int ProductId,
         [Required] int ClientId,
         [Required] string PhoneNumber,
+        [Required] string Address,
         [Required, EmailAddress] string Email,
         [Required] string ProductName,
         [Required] int PurchaseQuantity,
