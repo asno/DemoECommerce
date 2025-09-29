@@ -1,15 +1,20 @@
-﻿using ECommerce.SharedLibrary.Logs;
+﻿using ECommerce.SharedLibrary.DependencyInjection;
+using ECommerce.SharedLibrary.Logs;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OrderAPI.Application.Interface;
 using OrderAPI.Application.Services;
+using OrderAPI.Infrastructure.Data;
+using OrderAPI.Infrastructure.Repositories;
 using Polly;
 using Polly.Retry;
 
-namespace OrderAPI.Application.DependencyInjection
+namespace OrderAPI.Infrastructure.DependencyInjection
 {
     public static class ServiceContainer
     {
-        public static IServiceCollection AddApplicationService(this IServiceCollection services, IConfiguration config)
+        public static IServiceCollection AddInfrastructureService(this IServiceCollection services, IConfiguration config)
         {
             services.AddHttpClient<IOrderService, OrderService>(options =>
             {
@@ -38,7 +43,18 @@ namespace OrderAPI.Application.DependencyInjection
                 builder.AddRetry(retryStrategy);
             });
 
+            SharedServiceContainer.AddSharedServices<OrderDbContext>(services, config, config["MySerilog:FileName"]!);
+
+            services.AddScoped<IOrder, OrderRepository>();
+
             return services;
+        }
+
+        public static IApplicationBuilder UseInfrastructurePolicy(this IApplicationBuilder app)
+        {
+            SharedServiceContainer.UseSharedPolicies(app);
+
+            return app;
         }
     }
 }
