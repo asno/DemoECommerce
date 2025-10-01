@@ -8,11 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\DemoECommerce.SharedLibrary\ECommerce.SharedLibrary\ECommerce.SharedLibrary.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DTO\Conversion\" />
-    <Folder Include="Interface\" />
+    <ProjectReference Include="..\AuthenticationAPI.Domain\AuthenticationAPI.Domain.csproj" />
   </ItemGroup>
 
 </Project>

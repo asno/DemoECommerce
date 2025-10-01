@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace AuthenticationAPI.Application.DTO
 {
-    public record AppUserDTO
+    public record AppUserWithoutPasswordDTO
     (
         [Required] int Id,
         [Required] string Name,
         [Required] string PhoneNumber,
         [Required, EmailAddress] string Address,
         [Required] string Email,
-        [Required] string Password,
         [Required] string Role
     );
 }
