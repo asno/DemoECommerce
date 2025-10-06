@@ -1,13 +1,14 @@
 ﻿using AuthenticationAPI.Application.DTO;
 using AuthenticationAPI.Application.Interface;
 using ECommerce.SharedLibrary.Responses;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthenticationAPI.Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class AuthenticationController(IUser userInterface) : ControllerBase
     {
         [HttpPost("register")]
@@ -33,6 +34,7 @@ namespace AuthenticationAPI.Presentation.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [Authorize]
         public async Task<ActionResult<AppUserWithoutPasswordDTO>> GetUser(int id)
         {
             if (id < 1)

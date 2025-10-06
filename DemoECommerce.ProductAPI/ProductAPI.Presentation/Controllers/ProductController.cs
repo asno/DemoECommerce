@@ -1,7 +1,6 @@
 ﻿using ECommerce.SharedLibrary.Responses;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ProductAPI.Application.DTO;
 using ProductAPI.Application.DTO.Conversions;
 using ProductAPI.Application.Interface;
@@ -10,6 +9,7 @@ namespace ProductAPI.Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class ProductController(IProduct productInterface) : ControllerBase
     {
         [HttpGet]
@@ -39,6 +39,7 @@ namespace ProductAPI.Presentation.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Response>> UpdateProduct(ProductDTO productDTO)
         {
             if (!ModelState.IsValid)
@@ -52,6 +53,7 @@ namespace ProductAPI.Presentation.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Response>> DeleteProduct(ProductDTO productDTO)
         {
             if (!ModelState.IsValid)
@@ -61,6 +63,20 @@ namespace ProductAPI.Presentation.Controllers
 
             var product = ProductConversion.ToEntity(productDTO);
             var response = await productInterface.DeleteAsync(product);
+            return response.Flag is true ? Ok(response) : BadRequest(response);
+        }
+
+        [HttpPost]
+        [Authorize(Roles="Admin")]
+        public async Task<ActionResult<Response>> CreateProduct(ProductDTO productDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var product = ProductConversion.ToEntity(productDTO);
+            var response = await productInterface.CreateAsync(product);
             return response.Flag is true ? Ok(response) : BadRequest(response);
         }
     }

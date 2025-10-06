@@ -21,7 +21,7 @@ namespace OrderAPI.Application.Services
 
         public async Task<AppUserDTO> GetAsyncAppUserDTO(int appUserId)
         {
-            var httpMessage = await httpClient.GetAsync($"/api/users/{appUserId}");
+            var httpMessage = await httpClient.GetAsync($"/api/authentication/{appUserId}");
             if (!httpMessage.IsSuccessStatusCode)
             {
                 return null!;
